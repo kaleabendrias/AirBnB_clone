@@ -1,6 +1,19 @@
-# Project Name
+## Project Name
+A brief overview of the project, its purpose, and what it aims to achieve.
+# overview
+this project's goal  is to make a clone of the airbnb website; fullstack both frontend and backend.
+# purpose
+This project's purpose is to familiarise with the concepts of webstack development.
+they are:
+1. A command interpreter to manipulate data without a visual interface, like in a Shell (perfect for development and debugging)
+2. A website (the front-end) that shows the final product to everybody: static and dynamic
+3. A database or files that store data (data = objects)
+4. An API that provides a communication interface between the front-end and your data (retrieve, create, delete, update them)
+# objective
+this project's objective is to help to create a strong foundation in fullstack engineering.
 
-Project description goes here. Provide a brief overview of the project, its purpose, and what it aims to achieve.
+
+
 
 ## Learning Objectives
 
@@ -20,7 +33,7 @@ General:
 
 ## Copyright - Plagiarism
 
-You are tasked to come up with solutions for the tasks below yourself to meet the above learning objectives. Copying and pasting someone else's work or any form of plagiarism is strictly forbidden and will result in removal from the program.
+You are tasked to come up with solutions for the tasks below yourself to meet the above learning objectives. Copying and pasting someone else's work or any form of plagiarism is strictly forbidden.
 
 ## Requirements
 
