@@ -2,6 +2,7 @@
 """console acting console"""
 
 import cmd
+from models.base_model import BaseModel
 
 
 class HBNBCommand(cmd.Cmd):
@@ -21,3 +22,7 @@ class HBNBCommand(cmd.Cmd):
     def emptyline(self):
         """Do nothing on empty line"""
         pass
+
+
+if __name__ == '__main__':
+    HBNBCommand().cmdloop()
