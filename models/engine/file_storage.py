@@ -4,12 +4,15 @@
 import json
 from os.path import exists
 from datetime import datetime
+from models.base_model import BaseModel
+from models.user import User
 
 
 class FileStorage:
     """serializes instances to a JSON file and deserializes JSON file"""
     __file_path = 'file.json'
     __objects = {}
+    __cls_name = {"User": User, "BaseModel": BaseModel}
 
     def all(self):
         """ returns the dictionary __objects"""
@@ -29,17 +32,13 @@ class FileStorage:
             json.dump(new_obj, file)
 
     def reload(self):
-        """deserializes the JSON file to __objects:"""
-        if exists(FileStorage.__file_path):
-            with open(FileStorage.__file_path, 'r') as file:
-                obj_dict = json.load(file)
-                from models.base_model import BaseModel
-
-                for key, value in obj_dict.items():
-                    cls_name, obj_id = key.split('.')
-                    cls = BaseModel if cls_name == 'BaseModel' else None
-                    if cls:
-                        value['created_at'] = datetime.fromisoformat(value['created_at'])
-                        value['updated_at'] = datetime.fromisoformat(value['updated_at'])
-                        obj = cls(*value)
-                        self.new(obj)
+        """deserializes the JSON file to"""
+        try:
+            with open(FileStorage.__file_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            for key, value in data.items():
+                cls_name = key.split(".")[0]
+                if cls_name in FileStorage.__cls_name:
+                    self.__objects[key] = self.__cls_name[cls_name](**value)
+        except FileNotFoundError:
+            pass
