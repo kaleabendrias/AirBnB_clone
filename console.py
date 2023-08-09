@@ -61,13 +61,32 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
 
     @classmethod
-    def get_objects_for_specific_class(cls, dictOfAllObjects, specifiedClass):
+    def dict_to_str(cls, dictOfObj):
+        """
+        receive a dictionary of Objects and changes it to a string
+        """
+        listOfObj = []
+        for key, value in dictOfObj.items():
+            splitKey = key.split(".")
+            my_string = f'[{splitKey[0]}] ({splitKey[1]}) {value}'
+            listOfObj.append(my_string)
+        return listOfObj
+
+    @classmethod
+    def get_obj_of_a_class(cls, dictOfAllObjects, specifiedClass):
         """ gets all objects for a specific class """
         objectsDictionary = {}
         for key in dictOfAllObjects.keys():
             if dictOfAllObjects[key]["__class__"] == specifiedClass:
                 objectsDictionary[key] = dictOfAllObjects[key]
         return (objectsDictionary)
+
+    @classmethod
+    def strip_char(cls, string, char_to_remove):
+        """
+        removes certain characters and returns back the string
+        """
+        return ''.join(char for char in string if char not in char_to_remove)
 
     def do_create(self, arg):
         """ creates a new instance of a class"""
@@ -91,12 +110,13 @@ class HBNBCommand(cmd.Cmd):
         listOfArg = arg.split()
         if HBNBCommand.check_multiple_arg_passed(listOfArg) == 1:
             storage.reload()
-            dictionaryOfAllObjects = storage.all()
+            dictOfObj = storage.all()
             key = f"{listOfArg[0]}.{listOfArg[1]}"
-            if key not in dictionaryOfAllObjects.keys():
+            if key not in dictOfObj.keys():
                 print("** no instance found **")
                 return
-            print(f"{dictionaryOfAllObjects[key]}")
+            listOfStrings = HBNBCommand.dict_to_str(dictOfObj)
+            print(listOfStrings[0])
 
     def do_destroy(self, arg):
         """ deletes the existence of an instance """
@@ -106,30 +126,33 @@ class HBNBCommand(cmd.Cmd):
         listOfArg = arg.split()
         if HBNBCommand.check_multiple_arg_passed(listOfArg) == 1:
             storage.reload()
-            dictionaryOfAllObjects = storage.all()
+            dictOfObj = storage.all()
             key = f"{listOfArg[0]}.{listOfArg[1]}"
-            if key not in dictionaryOfAllObjects.keys():
+            if key not in dictOfObj.keys():
                 print("** no instance found **")
                 return
-            del dictionaryOfAllObjects[key]
+            del dictOfObj[key]
             storage.save()
 
     def do_all(self, arg):
         """ prints all objects in the json file """
         if not arg:
             pass
+        elif arg == "BaseModel":
+            pass
         elif arg in HBNBCommand.dictOfClasses.keys():
-            dictionaryOfAllObjects = storage.all()
-            my_dict = HBNBCommand.get_objects_for_specific_class(dictionaryOfAllObjects, arg)
-            print(my_dict)
-            print(len(my_dict))
+            dictOfObj = storage.all()
+            my_dict = HBNBCommand.get_obj_of_a_class(dictOfObj, arg)
+            listOfStrings = HBNBCommand.dict_to_str(my_dict)
+            print(listOfStrings)
             return
         else:
             print("** class doesn't exist **")
             return
         storage.reload()
-        dictionaryOfAllObjects = storage.all()
-        print(dictionaryOfAllObjects)
+        dictOfObj = storage.all()
+        listOfStrings = HBNBCommand.dict_to_str(dictOfObj)
+        print(listOfStrings)
 
     def do_update(self, arg):
         """ updates an instance based on class name and id """
@@ -141,9 +164,9 @@ class HBNBCommand(cmd.Cmd):
         listOfArg = arg.split()
         if HBNBCommand.check_multiple_arg_passed(listOfArg) == 1:
             storage.reload()
-            dictionaryOfAllObjects = storage.all()
+            dictOfObj = storage.all()
             key = f"{listOfArg[0]}.{listOfArg[1]}"
-            if key not in dictionaryOfAllObjects.keys():
+            if key not in dictOfObj.keys():
                 print("** no instance found **")
                 return
             if len(listOfArg) == 2:
@@ -152,16 +175,19 @@ class HBNBCommand(cmd.Cmd):
             if len(listOfArg) == 3:
                 print("** value missing **")
                 return
-            objectDict = dictionaryOfAllObjects[key]
+            objectDict = dictOfObj[key]
             objectDict[listOfArg[2]] = str(listOfArg[3])
             storage.save()
-
-    @classmethod
-    def strip_char(cls, string, char_to_remove):
-        """
-        removes certain characters and returns back the string
-        """
-        return ''.join(char for char in string if char not in char_to_remove)
+        
+    def do_count(self, arg):
+        """ retrieves the number of instances of a class """
+        if HBNBCommand.check_arg_if_passed(arg) == 0:
+            return
+        if arg not in HBNBCommand.dictOfClasses.keys():
+            print("** class doesn't exist **")
+            return
+        my_dict = HBNBCommand.get_obj_of_a_class(storage.all(), arg)
+        print(len(my_dict))
 
     @classmethod
     def precmd(cls, line):
@@ -171,17 +197,25 @@ class HBNBCommand(cmd.Cmd):
             if listOfArgs[0] in HBNBCommand.dictOfClasses.keys():
                 obj = HBNBCommand()
                 methods = [method for method in dir(obj) if callable(getattr(obj, method)) and not method.startswith("__")]
+
+                # used in adding a space before after method to allow spliting to be efficient
+                i = 0
+                for char in listOfArgs[1]:
+                    if char == "(":
+                        string = listOfArgs[1]
+                        listOfArgs[1] = string[:i] + " " + string[i:]
+                        break
+                    i += 1
+
                 otherArg = (listOfArgs[1]).split(" ")
                 userMethod = "do_" + otherArg[0]
                 userMethod = HBNBCommand().strip_char(userMethod, ["(", ")"])
                 for method in methods:
                     if userMethod == (f"{method}"):
-                        methodCall =\
-                                HBNBCommand.strip_char(otherArg[0], ["(", ")"])
-
+                        methodCall = HBNBCommand.strip_char(otherArg[0], ["(", ")"])
                         if (len(otherArg) > 1):
                             otherPart = ' '.join(otherArg[1:])
-                            print(otherPart)
+                            otherPart = HBNBCommand.strip_char(otherPart, ["(", ")", '"'])
                             return f"{methodCall} {listOfArgs[0]} {otherPart}"
                         else:
                             return f"{methodCall} {listOfArgs[0]}"
