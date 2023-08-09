@@ -60,6 +60,15 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class doesn't exist **")
 
+    @classmethod
+    def get_objects_for_specific_class(cls, dictOfAllObjects, specifiedClass):
+        """ gets all objects for a specific class """
+        objectsDictionary = {}
+        for key in dictOfAllObjects.keys():
+            if dictOfAllObjects[key]["__class__"] == specifiedClass:
+                objectsDictionary[key] = dictOfAllObjects[key]
+        return (objectsDictionary)
+
     def do_create(self, arg):
         """ creates a new instance of a class"""
         if HBNBCommand.check_arg_if_passed(arg) == 0:
@@ -110,7 +119,11 @@ class HBNBCommand(cmd.Cmd):
         if not arg:
             pass
         elif arg in HBNBCommand.dictOfClasses.keys():
-            pass
+            dictionaryOfAllObjects = storage.all()
+            my_dict = HBNBCommand.get_objects_for_specific_class(dictionaryOfAllObjects, arg)
+            print(my_dict)
+            print(len(my_dict))
+            return
         else:
             print("** class doesn't exist **")
             return
@@ -142,15 +155,6 @@ class HBNBCommand(cmd.Cmd):
             objectDict = dictionaryOfAllObjects[key]
             objectDict[listOfArg[2]] = str(listOfArg[3])
             storage.save()
-
-    @classmethod
-    def get_objects_for_specific_class(cls, dictOfAllObjects, specifiedClass):
-        """ gets all objects for a specific class """
-        objectsDictionary = {}
-        for key in dictionaryOfAllObjects.keys():
-            if dictionaryOfAllObjects[key]["__class__"] == specifiedClass:
-                objectsDictionary[key] = dictionaryOfAllObjects[key]
-        return (objectsDictionary)
 
     @classmethod
     def strip_char(cls, string, char_to_remove):
