@@ -19,8 +19,8 @@ class HBNBCommand(cmd.Cmd):
     """ The main class of the AirBnb console"""
     prompt = "(hbnb)"
     dictOfClasses = {"BaseModel": BaseModel(), "User": User(),
-            "Place": Place(), "State": State(), "City": City(),
-            "Amenity": Amenity(), "Review": Review()}
+                     "Place": Place(), "State": State(), "City": City(),
+                     "Amenity": Amenity(), "Review": Review()}
 
     def do_exit(self, arg):
         """Exits the cmd interpreter """
@@ -153,11 +153,11 @@ class HBNBCommand(cmd.Cmd):
         return (objectsDictionary)
 
     @classmethod
-    def strip_char(cls, input_string, char_to_remove):
+    def strip_char(cls, string, char_to_remove):
         """
         removes certain characters and returns back the string
         """
-        return ''.join(char for char in input_string if char not in char_to_remove)
+        return ''.join(char for char in string if char not in char_to_remove)
 
     @classmethod
     def precmd(cls, line):
