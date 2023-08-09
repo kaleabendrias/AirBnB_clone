@@ -167,12 +167,17 @@ class HBNBCommand(cmd.Cmd):
             if listOfArgs[0] in HBNBCommand.dictOfClasses.keys():
                 obj = HBNBCommand()
                 methods = [method for method in dir(obj) if callable(getattr(obj, method)) and not method.startswith("__")]
-                userMethod = "do_" + listOfArgs[1]
+                otherArgs = (listOfArgs[1]).split(" ")
+                userMethod = "do_" + otherArgs[0]
                 userMethod = HBNBCommand().strip_characters(userMethod, ["(", ")"])
                 for method in methods:
                     if userMethod == (f"{method}"):
-                        methodCall = HBNBCommand.strip_characters(listOfArgs[1], ["(", ")"])
-                        return f"{methodCall} {listOfArgs[1]}"
+                        methodCall = HBNBCommand.strip_characters(otherArgs[0], ["(", ")"])
+                        if (len(otherArgs) > 1):
+                            otherPart = ' '.join(otherArgs[1:])
+                            return f"{methodCall} {otherPart}"
+                        else:
+                            return f"{methodCall} {listOfArgs[0]}"
                 print(listOfArgs)
                 print(methods)
                 return line
