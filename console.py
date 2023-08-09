@@ -8,19 +8,19 @@ import cmd
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
-from models.state import State 
-from models.city import City 
-from models.amenity import Amenity 
-from models.place import Place 
-from models.review import Review 
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
     """ The main class of the AirBnb console"""
     prompt = "(hbnb)"
-    dictOfClasses = {"BaseModel":BaseModel(), "User":User(),\
-            "Place":Place(), "State":State(), "City":City(),\
-            "Amenity":Amenity(), "Review":Review()}
+    dictOfClasses = {"BaseModel": BaseModel(), "User": User(),
+            "Place": Place(), "State": State(), "City": City(),
+            "Amenity": Amenity(), "Review": Review()}
 
     def do_exit(self, arg):
         """Exits the cmd interpreter """
@@ -120,7 +120,8 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, arg):
         """ updates an instance based on class name and id """
-        #TODO don't forget the problem with double quotation when you have quotation in argument     
+        # TODO don't forget the problem with double quotation when you have quotation in argument
+        # TODO don't forget the problem with the inability to use space character in strings during update since it is being spit during the Listing Of Arguments operation
         if HBNBCommand.check_arg_if_passed(arg) == 0:
             return
         # arg must be broken since the cmd module does not multiple arg
@@ -143,7 +144,7 @@ class HBNBCommand(cmd.Cmd):
             storage.save()
 
     @classmethod
-    def get_objects_for_specific_class(cls, dictionaryOfAllObjects, specifiedClass):
+    def get_objects_for_specific_class(cls, dictOfAllObjects, specifiedClass):
         """ gets all objects for a specific class """
         objectsDictionary = {}
         for key in dictionaryOfAllObjects.keys():
@@ -152,12 +153,11 @@ class HBNBCommand(cmd.Cmd):
         return (objectsDictionary)
 
     @classmethod
-    def strip_characters(cls,input_string, characters_to_remove):
+    def strip_char(cls, input_string, char_to_remove):
         """
         removes certain characters and returns back the string
         """
-        return ''.join(char for char in input_string if char not in characters_to_remove)
-
+        return ''.join(char for char in input_string if char not in char_to_remove)
 
     @classmethod
     def precmd(cls, line):
@@ -167,27 +167,25 @@ class HBNBCommand(cmd.Cmd):
             if listOfArgs[0] in HBNBCommand.dictOfClasses.keys():
                 obj = HBNBCommand()
                 methods = [method for method in dir(obj) if callable(getattr(obj, method)) and not method.startswith("__")]
-                otherArgs = (listOfArgs[1]).split(" ")
-                userMethod = "do_" + otherArgs[0]
-                userMethod = HBNBCommand().strip_characters(userMethod, ["(", ")"])
+                otherArg = (listOfArgs[1]).split(" ")
+                userMethod = "do_" + otherArg[0]
+                userMethod = HBNBCommand().strip_char(userMethod, ["(", ")"])
                 for method in methods:
                     if userMethod == (f"{method}"):
-                        methodCall = HBNBCommand.strip_characters(otherArgs[0], ["(", ")"])
-                        if (len(otherArgs) > 1):
-                            otherPart = ' '.join(otherArgs[1:])
+                        methodCall =\
+                                HBNBCommand.strip_char(otherArg[0], ["(", ")"])
+
+                        if (len(otherArg) > 1):
+                            otherPart = ' '.join(otherArg[1:])
                             print(otherPart)
-                            return f"{methodCall} {otherPart}"
+                            return f"{methodCall} {listOfArgs[0]} {otherPart}"
                         else:
-                            print(otherArgs)
                             return f"{methodCall} {listOfArgs[0]}"
-                print(listOfArgs)
-                print(methods)
                 return line
             else:
                 return line
         else:
             return line
-
 
 
 if __name__ == "__main__":
