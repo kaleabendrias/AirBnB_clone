@@ -175,8 +175,10 @@ class HBNBCommand(cmd.Cmd):
                         methodCall = HBNBCommand.strip_characters(otherArgs[0], ["(", ")"])
                         if (len(otherArgs) > 1):
                             otherPart = ' '.join(otherArgs[1:])
+                            print(otherPart)
                             return f"{methodCall} {otherPart}"
                         else:
+                            print(otherArgs)
                             return f"{methodCall} {listOfArgs[0]}"
                 print(listOfArgs)
                 print(methods)
