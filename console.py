@@ -178,7 +178,7 @@ class HBNBCommand(cmd.Cmd):
             objectDict = dictOfObj[key]
             objectDict[listOfArg[2]] = str(listOfArg[3])
             storage.save()
-        
+
     def do_count(self, arg):
         """ retrieves the number of instances of a class """
         if HBNBCommand.check_arg_if_passed(arg) == 0:
@@ -196,9 +196,12 @@ class HBNBCommand(cmd.Cmd):
             listOfArgs = line.split(".")
             if listOfArgs[0] in HBNBCommand.dictOfClasses.keys():
                 obj = HBNBCommand()
-                methods = [method for method in dir(obj) if callable(getattr(obj, method)) and not method.startswith("__")]
+                methods = []
+                for el in dir(obj):
+                    if callable(getattr(obj, el)) and not el.startswith("__"):
+                        methods.append(el)
 
-                # used in adding a space before after method to allow spliting to be efficient
+                # used in adding a space before method to allow spliting
                 i = 0
                 for char in listOfArgs[1]:
                     if char == "(":
@@ -212,13 +215,13 @@ class HBNBCommand(cmd.Cmd):
                 userMethod = HBNBCommand().strip_char(userMethod, ["(", ")"])
                 for method in methods:
                     if userMethod == (f"{method}"):
-                        methodCall = HBNBCommand.strip_char(otherArg[0], ["(", ")"])
+                        cmd = HBNBCommand.strip_char(otherArg[0], ["(", ")"])
                         if (len(otherArg) > 1):
-                            otherPart = ' '.join(otherArg[1:])
-                            otherPart = HBNBCommand.strip_char(otherPart, ["(", ")", '"'])
-                            return f"{methodCall} {listOfArgs[0]} {otherPart}"
+                            arg = ' '.join(otherArg[1:])
+                            arg = HBNBCommand.strip_char(arg, ["(", ")", '"'])
+                            return f"{cmd} {listOfArgs[0]} {arg}"
                         else:
-                            return f"{methodCall} {listOfArgs[0]}"
+                            return f"{cmd} {listOfArgs[0]}"
                 return line
             else:
                 return line
