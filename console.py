@@ -20,6 +20,15 @@ class HBNBCommand(cmd.Cmd):
              "State": State, "City": City, "Amenity": Amenity,
              "Review": Review}
 
+    @classmethod
+    def strip_characters(cls, input_string, characters_to_remove):
+        """removes certain characters and returns back the string"""
+        filtered_string = ""
+        for char in input_string:
+            if char not in characters_to_remove:
+                filtered_string += char
+        return filtered_string
+
     def do_quit(self, arg):
         """Quit command to exit the program"""
         return True
@@ -92,9 +101,10 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
         else:
             results = []
-            for inst in insts:
-                if inst.startswith(arg + '.'):
-                    results.append(str(insts[inst]))
+            class_name = arg
+            for inst in insts.values():
+                if isinstance(inst, self.dictt[class_name]):
+                    results.append(str(inst))
             print(results)
 
     def do_update(self, arg):
@@ -120,6 +130,37 @@ class HBNBCommand(cmd.Cmd):
                     instance.save()
             else:
                 print("** no instance found **")
+
+    @classmethod
+    def precmd(cls, line):
+        """ happens before command is executed """
+        if "." in line:
+            listOfArgs = line.split(".")
+            if listOfArgs[0] in HBNBCommand.dictt.keys():
+                obj = HBNBCommand()
+                methods = [method for method in dir(obj) if callable(getattr(obj, method)) and not method.startswith("__")]
+                otherArgs = (listOfArgs[1]).split(" ")
+                userMethod = "do_" + otherArgs[0]
+                userMethod = HBNBCommand().strip_characters(userMethod, ["(", ")"])
+                for method in methods:
+                    if userMethod == (f"{method}"):
+                        methodCall = HBNBCommand.strip_characters(otherArgs[0], ["(", ")"])
+                        if (len(otherArgs) > 1):
+                            otherPart = ' '.join(otherArgs[1:])
+                            print(otherPart)
+                            return f"{methodCall} {otherPart}"
+                        else:
+                            print(otherArgs)
+                            return f"{methodCall} {listOfArgs[0]}"
+                print(listOfArgs)
+                print(methods)
+                return line
+            else:
+                return line
+
+        else:
+            return line
+
 
 
 if __name__ == '__main__':
