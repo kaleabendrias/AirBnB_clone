@@ -172,8 +172,7 @@ class HBNBCommand(cmd.Cmd):
                 for method in methods:
                     if userMethod == (f"{method}"):
                         methodCall = HBNBCommand.strip_characters(listOfArgs[1], ["(", ")"])
-                        #return f"{listOfArgs[0]} {methodCall}"
-                        return f"{methodCall}"
+                        return f"{methodCall} {listOfArgs[1]}"
                 print(listOfArgs)
                 print(methods)
                 return line
