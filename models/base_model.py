@@ -19,12 +19,12 @@ class BaseModel:
     def __init__(self, *args, **kwargs):
         """ init method"""
         if kwargs:
-            for key,value in kwargs.items():
+            for key, value in kwargs.items():
                 if key != '__class__':
                     if key == 'created_at' or key == 'updated_at':
                         setattr(self, key, datetime.fromisoformat(value))
                     else:
-                        setattr(self,key,value)
+                        setattr(self, key, value)
         else:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
