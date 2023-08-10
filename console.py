@@ -21,7 +21,7 @@ class HBNBCommand(cmd.Cmd):
              "Review": Review}
 
     @classmethod
-    def strip_characters(cls, input_string, characters_to_remove):
+    def strip_char(cls, input_string, characters_to_remove):
         """removes certain characters and returns back the string"""
         filtered_string = ""
         for char in input_string:
@@ -126,10 +126,25 @@ class HBNBCommand(cmd.Cmd):
                     print("** value missing **")
                 else:
                     instance = instances[instance_key]
-                    setattr(instance, args[2], args[3].strip("'\""))
+                    setattr(instance, args[2], args[3].strip("'\\\""))
                     instance.save()
             else:
                 print("** no instance found **")
+
+    def do_count(self, arg):
+        """Counts the number of instances of a class"""
+        if not arg:
+            print("** class name missing **")
+        elif arg not in self.dictt:
+            print("** class doesn't exist **")
+        else:
+            instances = models.storage.all()
+            class_name = arg
+            count = 0
+            for inst in instances.values():
+                if isinstance(inst, self.dictt[class_name]):
+                    count += 1
+            print(count)
 
     @classmethod
     def precmd(cls, line):
@@ -138,29 +153,41 @@ class HBNBCommand(cmd.Cmd):
             listOfArgs = line.split(".")
             if listOfArgs[0] in HBNBCommand.dictt.keys():
                 obj = HBNBCommand()
-                methods = [method for method in dir(obj) if callable(getattr(obj, method)) and not method.startswith("__")]
-                otherArgs = (listOfArgs[1]).split(" ")
-                userMethod = "do_" + otherArgs[0]
-                userMethod = HBNBCommand().strip_characters(userMethod, ["(", ")"])
+                methods = []
+                for el in dir(obj):
+                    if callable(getattr(obj, el)) and not el.startswith("__"):
+                        methods.append(el)
+                i = 0
+                for char in listOfArgs[1]:
+                    if char == "(":
+                        string = listOfArgs[1]
+                        listOfArgs[1] = string[:i] + " " + string[i:]
+                        break
+                    i += 1
+                otherArg = (listOfArgs[1]).split(" ")
+                userMethod = "do_" + otherArg[0]
+                userMethod = HBNBCommand().strip_char(userMethod, ["(", ")"])
                 for method in methods:
                     if userMethod == (f"{method}"):
-                        methodCall = HBNBCommand.strip_characters(otherArgs[0], ["(", ")"])
-                        if (len(otherArgs) > 1):
-                            otherPart = ' '.join(otherArgs[1:])
-                            print(otherPart)
-                            return f"{methodCall} {otherPart}"
+                        cmd = HBNBCommand.strip_char(otherArg[0], ["(", ")"])
+                        if (len(otherArg) > 1):
+                            args = ' '.join(otherArg[1:])
+                            args = HBNBCommand.strip_char(args, ["(", ")", '"'])
+                            if cmd == "update":
+                                update_args = args.split(",")
+                                instance_id = update_args[0]
+                                attribute_name = update_args[1]
+                                attribute_value = update_args[2]
+                                return f"{cmd} {listOfArgs[0]} {instance_id} {attribute_name} {attribute_value}"
+                            else:
+                                return f"{cmd} {listOfArgs[0]} {args}"
                         else:
-                            print(otherArgs)
-                            return f"{methodCall} {listOfArgs[0]}"
-                print(listOfArgs)
-                print(methods)
+                            return f"{cmd} {listOfArgs[0]}"
                 return line
             else:
                 return line
-
         else:
             return line
-
 
 
 if __name__ == '__main__':
