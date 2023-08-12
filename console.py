@@ -225,8 +225,12 @@ class HBNBCommand(cmd.Cmd):
             else:
                 return line
         else:
+    
             return line
 
+    def postloop(self):
+        """Called after the command loop exits."""
+        print()
 
 
 if __name__ == "__main__":

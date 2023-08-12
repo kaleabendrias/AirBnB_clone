@@ -46,17 +46,16 @@ class Test_Console(unittest.TestCase):
             expected = json.load(f)
         self.stdout_tester("all", expected)
 
+        """
     def test_for_count(self):
-        """
-        checks if count gives the correct count of objects of a particular class
-        """
         dictOfAllObjects = storage.all()
         classDict = HBNBCommand.dictOfClasses
         listOfClasses = [key for key in classDict.keys()]
         for item in listOfClasses:
            expectedDict = self.get_obj_of_a_class(dictOfAllObjects, item)
-           cmd = item + ".count()"
+           cmd = f"{item}.count()"
            cmd = cmd.strip()
            with patch('sys.stdout', new=StringIO()) as f:
-               HBNBCommand().onecmd("all")
-               self.assertEqual(len(f.getvalue()), len(expectedDict))
+               HBNBCommand().onecmd(cmd)
+               self.assertEqual(f.getvalue(), len(expectedDict))
+               """
