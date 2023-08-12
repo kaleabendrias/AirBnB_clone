@@ -35,7 +35,7 @@ class FileStorage:
         it is used to serialize objects
         the json __file_path
         """
-        with open(FileStorage.__file_path, "w+") as file:
+        with open(FileStorage.__file_path, "w") as file:
             json.dump(FileStorage.__objects, file)
 
     def reload(self):

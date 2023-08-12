@@ -17,7 +17,7 @@ from models.review import Review
 
 class HBNBCommand(cmd.Cmd):
     """ The main class of the AirBnb console"""
-    prompt = "(hbnb)"
+    prompt = "(hbnb) "
     dictOfClasses = {"BaseModel": BaseModel(), "User": User(),
                      "Place": Place(), "State": State(), "City": City(),
                      "Amenity": Amenity(), "Review": Review()}
@@ -32,7 +32,7 @@ class HBNBCommand(cmd.Cmd):
 
     def emptyline(self):
         """ do nothing when an emptyline is entered """
-        pass
+        return False
 
     @classmethod
     def check_arg_if_passed(self, arg):
@@ -156,7 +156,6 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, arg):
         """ updates an instance based on class name and id """
-        # TODO don't forget the problem with double quotation when you have quotation in argument
         # TODO don't forget the problem with the inability to use space character in strings during update since it is being spit during the Listing Of Arguments operation
         if HBNBCommand.check_arg_if_passed(arg) == 0:
             return
@@ -218,7 +217,7 @@ class HBNBCommand(cmd.Cmd):
                         cmd = HBNBCommand.strip_char(otherArg[0], ["(", ")"])
                         if (len(otherArg) > 1):
                             arg = ' '.join(otherArg[1:])
-                            arg = HBNBCommand.strip_char(arg, ["(", ")", '"'])
+                            arg = HBNBCommand.strip_char(arg, ["(", ")", '"', ",", "'"])
                             return f"{cmd} {listOfArgs[0]} {arg}"
                         else:
                             return f"{cmd} {listOfArgs[0]}"
@@ -227,6 +226,7 @@ class HBNBCommand(cmd.Cmd):
                 return line
         else:
             return line
+
 
 
 if __name__ == "__main__":

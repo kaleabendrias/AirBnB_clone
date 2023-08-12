@@ -8,6 +8,7 @@ base of all other classes
 
 import datetime
 from models.base_model import BaseModel
+from models import storage
 import unittest
 import uuid
 
@@ -56,6 +57,11 @@ class Test_BaseModel(unittest.TestCase):
         initial = self.model1.updated_at
         self.model1.save()
         self.assertNotEqual(self.model1.updated_at, initial)
+        dictOfObj = storage.all()
+        obj = self.model1
+        key = f"{obj.__class__.__name__}.{obj.id}"
+        del dictOfObj[key]
+        storage.save()
 
     def test_for_to_dict(self):
         """

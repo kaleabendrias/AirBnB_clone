@@ -31,20 +31,23 @@ class Test_for_FileStorage(unittest.TestCase):
         """
         cleans up created file by setUp
         """
-        pass
+        dictOfObj = storage.all()
+        obj = self.model1
+        key = f"{obj.__class__.__name__}.{obj.id}"
+        del dictOfObj[key]
+        storage.save()
 
     def test_for_all(self):
         """
         tests the returned dictionary __objects
         """
-        my_dict = self.model1.to_dict()
         self.assertTrue(len(storage.all()))
 
     def test_for_new(self):
         """
         checks if a new object has been added in the dict
         """
-        obj = BaseModel()
+        obj = self.model1
         storage.new(obj)
         key = f"{obj.__class__.__name__}.{obj.id}"
         if key not in storage.all().keys():
@@ -54,7 +57,7 @@ class Test_for_FileStorage(unittest.TestCase):
         """
         tests for file existence
         """
-        if os.path.exists(self.file_path):
-            os.remove(self.file_path)
+        if os.path.exists("file.json"):
+            pass
         else:
             self.fail("file does not exist")
