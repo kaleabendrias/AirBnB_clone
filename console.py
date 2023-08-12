@@ -156,7 +156,6 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, arg):
         """ updates an instance based on class name and id """
-        # TODO don't forget the problem with the inability to use space character in strings during update since it is being spit during the Listing Of Arguments operation
         if HBNBCommand.check_arg_if_passed(arg) == 0:
             return
         # arg must be broken since the cmd module does not multiple arg
@@ -225,7 +224,6 @@ class HBNBCommand(cmd.Cmd):
             else:
                 return line
         else:
-    
             return line
 
     def postloop(self):

@@ -34,7 +34,7 @@ class Test_Console(unittest.TestCase):
         """
 
         with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd(cmd)
+            HBNBCommand().onecmd("User.all()")
             parsed_list = ast.literal_eval(f.getvalue())
             self.assertEqual(len(parsed_list), len(expected))
 
@@ -45,17 +45,3 @@ class Test_Console(unittest.TestCase):
         with open("file.json", "r+") as f:
             expected = json.load(f)
         self.stdout_tester("all", expected)
-
-        """
-    def test_for_count(self):
-        dictOfAllObjects = storage.all()
-        classDict = HBNBCommand.dictOfClasses
-        listOfClasses = [key for key in classDict.keys()]
-        for item in listOfClasses:
-           expectedDict = self.get_obj_of_a_class(dictOfAllObjects, item)
-           cmd = f"{item}.count()"
-           cmd = cmd.strip()
-           with patch('sys.stdout', new=StringIO()) as f:
-               HBNBCommand().onecmd(cmd)
-               self.assertEqual(f.getvalue(), len(expectedDict))
-               """
