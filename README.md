@@ -76,7 +76,7 @@ The `console.py` script is a command-line interface (CLI) that provides an inter
 
 1. Clone the AirBnB repository:
    ```bash
-   git clone https://github.com/yourusername/AirBnB_clone.git
+   git clone https://github.com/kaleabendrias/AirBnB_clone.git
    ```
 
 2. Navigate to the project directory:
