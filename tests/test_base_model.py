@@ -38,7 +38,7 @@ class Test_BaseModel(unittest.TestCase):
         self.assertIsInstance(self.model1.created_at, datetime.datetime)
         self.assertIsInstance(self.model1.updated_at, datetime.datetime)
         # for typed input
-        model2 = BaseModel(created_at = "2023-08-07 21:50:34.33356")
+        model2 = BaseModel(created_at = "2023-08-13T01:52:45.399964")
         self.assertIsInstance(self.model1.created_at, datetime.datetime)
 
     def test_for__str__(self):
