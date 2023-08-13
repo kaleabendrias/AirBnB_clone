@@ -14,7 +14,7 @@ class Test_Place(unittest.TestCase):
         """
         tests if it has a documentation
         """
-        self.assertIsNotNone(Place.__doc__);
+        self.assertIsNotNone(Place.__doc__)
 
     def test_for_city_id(self):
         """

@@ -38,7 +38,7 @@ class Test_BaseModel(unittest.TestCase):
         self.assertIsInstance(self.model1.created_at, datetime.datetime)
         self.assertIsInstance(self.model1.updated_at, datetime.datetime)
         # for typed input
-        model2 = BaseModel(created_at = "2023-08-13T01:52:45.399964")
+        model2 = BaseModel(created_at="2023-08-07T21:50:34.333")
         self.assertIsInstance(self.model1.created_at, datetime.datetime)
 
     def test_for__str__(self):
@@ -46,9 +46,8 @@ class Test_BaseModel(unittest.TestCase):
         this is a test for the function
         __str__
         """
-        expectedString =\
-                f"[BaseModel] ({self.model1.id}) {self.model1.__dict__}"
-        self.assertEqual(str(self.model1), expectedString)
+        expectedStr = f"[BaseModel] ({self.model1.id}) {self.model1.__dict__}"
+        self.assertEqual(str(self.model1), expectedStr)
 
     def test_for_save(self):
         """
