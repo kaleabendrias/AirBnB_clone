@@ -171,16 +171,17 @@ class HBNBCommand(cmd.Cmd):
                     if userMethod == (f"{method}"):
                         cmd = HBNBCommand.strip_char(otherArg[0], ["(", ")"])
                         if (len(otherArg) > 1):
-                            args = ' '.join(otherArg[1:])
-                            args = HBNBCommand.strip_char(args, ["(", ")", '"'])
+                            arg = ' '.join(otherArg[1:])
+                            arg = HBNBCommand.strip_char(arg, ["(", ")", '"'])
                             if cmd == "update":
-                                update_args = args.split(",")
-                                instance_id = update_args[0]
-                                attribute_name = update_args[1]
-                                attribute_value = update_args[2]
-                                return f"{cmd} {listOfArgs[0]} {instance_id} {attribute_name} {attribute_value}"
+                                u_a = arg.split(",")
+                                i_i = u_a[0]
+                                a_n = u_a[1]
+                                a_v = u_a[2]
+                                to = f"{cmd} {listOfArgs[0]} {i_i} {a_n} {a_v}"
+                                return to
                             else:
-                                return f"{cmd} {listOfArgs[0]} {args}"
+                                return f"{cmd} {listOfArgs[0]} {arg}"
                         else:
                             return f"{cmd} {listOfArgs[0]}"
                 return line

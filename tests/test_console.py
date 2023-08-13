@@ -1,47 +1,45 @@
 #!/usr/bin/python3
 
 """
-this is unittest for console.py
+this is a test module for the console
 """
-
-from console import HBNBCommand
-from models import storage
-# ast: changes a str to literal datatype "[1, 2, 3]" -> [1, 2, 3]
-import ast
-import json
-from io import StringIO
 import unittest
 from unittest.mock import patch
+from io import StringIO
+from console import HBNBCommand
 
 
-class Test_Console(unittest.TestCase):
-    """
-    tests console class to check if the required output
-    is actually what is the output
-    """
-    def get_obj_of_a_class(cls, dictOfAllObjects, specifiedClass):
-        """ gets all objects for a specific class """
-        objectsDictionary = {}
-        for key in dictOfAllObjects.keys():
-            if dictOfAllObjects[key]["__class__"] == specifiedClass:
-                objectsDictionary[key] = dictOfAllObjects[key]
-        return (objectsDictionary)
+class TestConsole(unittest.TestCase):
+    """Test cases for the console.py"""
+    def test_help(self):
+        """Test the help command"""
+        with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+            with patch('sys.stdin', StringIO("help\nquit\n")):
+                HBNBCommand().cmdloop()
+            output = mock_stdout.getvalue().strip()
+            self.assertIn("Documented commands (type help <topic>):", output)
+            self.assertIn("quit  --- Quit the console", output)
 
-    def stdout_tester(self, cmd, expected):
-        """
-        so this function takes all arguments passed into it and
-        checks it  with the expected input
-        """
+    def test_create(self):
+        """Test the create command"""
+        with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+            with patch('sys.stdin', StringIO("create BaseModel\nall\n")):
+                HBNBCommand().cmdloop()
+            output = mock_stdout.getvalue().strip()
+            self.assertIn("BaseModel", output)
 
-        with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd(cmd)
-            parsed_list = ast.literal_eval(f.getvalue())
-            self.assertEqual(len(parsed_list), len(expected))
+    def test_show(self):
+        """Test the show command"""
+        with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+            with patch('sys.stdin', StringIO("create BaseModel\nshow BaseModel\n")):
+                HBNBCommand().cmdloop()
+            output = mock_stdout.getvalue().strip()
+            self.assertIn("BaseModel", output)
 
-    def test_for_all_format1(self):
-        """
-        checks if all command gives all input with and without adding BaseModel
-        """
-        with open("file.json", "r+") as f:
-            expected = json.load(f)
-        self.stdout_tester("all", expected)
+    def test_destroy(self):
+        """Test the destroy command"""
+        with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+            with patch('sys.stdin', StringIO("create BaseModel\ndestroy BaseModel\n")):
+                HBNBCommand().cmdloop()
+            output = mock_stdout.getvalue().strip()
+            self.assertEqual(output, "")
