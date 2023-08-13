@@ -20,16 +20,16 @@ class Test_Console(unittest.TestCase):
     is actually what is the output
     """
     def get_obj_of_a_class(cls, dictOfAllObjects, specifiedClass):
-         """ gets all objects for a specific class """
-         objectsDictionary = {}
-         for key in dictOfAllObjects.keys():
-             if dictOfAllObjects[key]["__class__"] == specifiedClass:
-                 objectsDictionary[key] = dictOfAllObjects[key]
-         return (objectsDictionary)
+        """ gets all objects for a specific class """
+        objectsDictionary = {}
+        for key in dictOfAllObjects.keys():
+            if dictOfAllObjects[key]["__class__"] == specifiedClass:
+                objectsDictionary[key] = dictOfAllObjects[key]
+        return (objectsDictionary)
 
     def stdout_tester(self, cmd, expected):
         """
-        so this function takes all arguments passed into it and 
+        so this function takes all arguments passed into it and
         checks it  with the expected input
         """
 
