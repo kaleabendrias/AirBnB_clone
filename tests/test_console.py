@@ -34,7 +34,7 @@ class Test_Console(unittest.TestCase):
         """
 
         with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd("User.all()")
+            HBNBCommand().onecmd(cmd)
             parsed_list = ast.literal_eval(f.getvalue())
             self.assertEqual(len(parsed_list), len(expected))
 

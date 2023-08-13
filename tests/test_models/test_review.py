@@ -14,7 +14,7 @@ class Test_Review(unittest.TestCase):
         """
         tests if it has a documentation
         """
-        self.assertIsNotNone(Review.__doc__)1
+        self.assertIsNotNone(Review.__doc__)
 
     def test_for_place_id(self):
         """
