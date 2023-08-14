@@ -75,3 +75,21 @@ class Test_for_FileStorage(unittest.TestCase):
             pass
         else:
             self.fail("file does not exist")
+
+    def test_reload(self):
+        """Test the reload method"""
+        base_model = BaseModel()
+        self.storage.new(base_model)
+        self.storage.save()
+        with open("file.json", "r") as file:
+            text = file.read()
+            self.assertIn("BaseModel." + base_model.id, text)
+
+        base_model.name = "Updated name"
+        base_model.save()
+
+        new_storage = FileStorage()
+        new_storage.reload()
+        key = "{}.{}".format(base_model.__class__.__name__, base_model.id)
+        self.assertIn(key, self.storage._FileStorage__objects)
+        reloaded_ins = new_storage.all()[key]
