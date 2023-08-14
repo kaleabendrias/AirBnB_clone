@@ -48,8 +48,9 @@ class TestConsole(unittest.TestCase):
 
     def test_count(self):
         with patch('sys.stdout', new=StringIO()) as mock_stdout:
-            self.console.onecmd("BaseModel.count()")
-            self.assertIn("", mock_stdout.getvalue())
+            self.console.onecmd("count BaseModel")
+            output = mock_stdout.getvalue().strip()
+            self.assertTrue(output.isdigit())
 
     def test_EOF(self):
         """ Test EOF method"""
@@ -66,10 +67,13 @@ class TestConsole(unittest.TestCase):
             self.assertEqual(output, "")
 
     def test_user_all(self):
+        test_inst1 = User()
+        test_inst1.save()
         with patch('sys.stdout', new=StringIO()) as mock_stdout:
             self.console.onecmd("User.all()")
-            output = mock_stdout.getvalue()
-            self.assertIn("[]", output)  # Assuming no User instances exist
+            output = mock_stdout.getvalue().strip()
+            expected_output = f"[User] ({test_inst1.id})\n"
+            self.assertIn(f"[User] ({test_inst1.id})", output)
 
 
 if __name__ == '__main__':
