@@ -5,7 +5,7 @@ this is a module used to test the console
 """
 
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 from io import StringIO
 from console import HBNBCommand
 
@@ -84,6 +84,23 @@ class TestConsole(unittest.TestCase):
             output = f.getvalue().strip()
             self.assertTrue(output.isdigit())
 
+    def test_quit(self):
+        """
+        test the 'quit' command of the console
+        Checks if the command exits the console loop
+        """
+        with patch("sys.stdout", new=StringIO()) as f:
+            HBNBCommand().onecmd("quit")
+            self.assertEqual(f.getvalue(), "")
+
+    def test_EOF(self):
+        """
+        test the 'EOF' command of the console
+        Checks if the command exits the console loop
+        """
+        with patch("sys.stdout", new=StringIO()) as f:
+            HBNBCommand().onecmd("EOF")
+            self.assertEqual(f.getvalue(), "")
 
 if __name__ == '__main__':
     unittest.main()
