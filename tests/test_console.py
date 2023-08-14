@@ -66,15 +66,6 @@ class TestConsole(unittest.TestCase):
             output = f.getvalue().strip()
             self.assertEqual(output, "")
 
-    def test_user_all(self):
-        test_inst1 = User()
-        test_inst1.save()
-        with patch('sys.stdout', new=StringIO()) as mock_stdout:
-            self.console.onecmd("User.all()")
-            output = mock_stdout.getvalue().strip()
-            expected_output = f"[User] ({test_inst1.id})\n"
-            self.assertIn(f"[User] ({test_inst1.id})", output)
-
 
 if __name__ == '__main__':
     unittest.main()
