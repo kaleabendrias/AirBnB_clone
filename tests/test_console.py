@@ -64,12 +64,12 @@ class TestConsole(unittest.TestCase):
             HBNBCommand().onecmd("")
             output = f.getvalue().strip()
             self.assertEqual(output, "")
-    
+
     def test_user_all(self):
         with patch('sys.stdout', new=StringIO()) as mock_stdout:
             self.console.onecmd("User.all()")
             output = mock_stdout.getvalue()
-            self.assertIn("[]", output)  # Assuming no User instances exist initially
+            self.assertIn("[]", output)  # Assuming no User instances exist
 
 
 if __name__ == '__main__':
