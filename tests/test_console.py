@@ -200,6 +200,98 @@ class TestConsole(unittest.TestCase):
             self.assertFalse(output.startswith('["'))
             self.assertFalse(output.endswith('"]'))
 
+    def test_show_without_class_name(self):
+        """ Test show without class name"""
+        with patch("sys.stdout", new=StringIO()) as f:
+            HBNBCommand().onecmd("show")
+            output = f.getvalue().strip()
+            self.assertEqual(output, "** class name missing **")
+
+    def test_show_with_invalid_class_name(self):
+        """ Test show with invalid class name"""
+        with patch("sys.stdout", new=StringIO()) as f:
+            HBNBCommand().onecmd("show MyModel")
+            output = f.getvalue().strip()
+            self.assertEqual(output, "** class doesn't exist **")
+
+    def test_show_without_instance_id(self):
+        """ Test show without instance id"""
+        with patch("sys.stdout", new=StringIO()) as f:
+            HBNBCommand().onecmd("show User")
+            output = f.getvalue().strip()
+            self.assertEqual(output, "** instance id missing **")
+
+    def test_show_with_invalid_instance_id(self):
+        """ Test show with invalid instance id"""
+        with patch("sys.stdout", new=StringIO()) as f:
+            HBNBCommand().onecmd("show User 121212")
+            output = f.getvalue().strip()
+            self.assertEqual(output, "** no instance found **")
+
+    def test_destroy_with_valid_class_and_id(self):
+        """ Test destroy with valid class and id"""
+        test_inst = User()
+        test_inst.save()
+        cmd = f"destroy User {test_inst.id}"
+        with patch("sys.stdout", new=StringIO()) as f:
+            HBNBCommand().onecmd(cmd)
+            HBNBCommand().onecmd(f"show User {test_inst.id}")
+            output = f.getvalue().strip()
+            self.assertEqual(output, "** no instance found **")
+
+    def test_destroy_with_missing_class_name(self):
+        """ Test destroy with missing class name"""
+        with patch("sys.stdout", new=StringIO()) as f:
+            HBNBCommand().onecmd("destroy")
+            output = f.getvalue().strip()
+            self.assertEqual(output, "** class name missing **")
+
+    def test_destroy_with_nonexistent_class(self):
+        """ Test destroy with nonexistent class"""
+        with patch("sys.stdout", new=StringIO()) as f:
+            HBNBCommand().onecmd("destroy MyModel")
+            output = f.getvalue().strip()
+            self.assertEqual(output, "** class doesn't exist **")
+
+    def test_destroy_with_missing_id(self):
+        """ Test destroy with missing id"""
+        with patch("sys.stdout", new=StringIO()) as f:
+            HBNBCommand().onecmd("destroy BaseModel")
+            output = f.getvalue().strip()
+            self.assertEqual(output, "** instance id missing **")
+
+    def test_destroy_with_nonexistent_instance(self):
+        """ Test destroy with nonexistent instance"""
+        with patch("sys.stdout", new=StringIO()) as f:
+            HBNBCommand().onecmd("destroy BaseModel 121212")
+            output = f.getvalue().strip()
+            self.assertEqual(output, "** no instance found **")
+
+    def test_all_with_no_class(self):
+        """ Test all with no class"""
+        test_inst1 = User()
+        test_inst1.save()
+        test_inst2 = User()
+        test_inst2.save()
+        test_inst3 = User()
+        test_inst2.save()
+        test_inst4 = Place()
+        test_inst4.save()
+        test_inst5 = Place()
+        test_inst5.save()
+        with patch("sys.stdout", new=StringIO()) as f:
+            HBNBCommand().onecmd("all")
+            output = f.getvalue().strip()
+            self.assertIn(f"[User] ({test_inst1.id})", output)
+            self.assertIn(f"[User] ({test_inst2.id})", output)
+            self.assertIn(f"[User] ({test_inst3.id})", output)
+            self.assertIn(f"[Place] ({test_inst4.id})", output)
+            self.assertIn(f"[Place] ({test_inst5.id})", output)
+            self.assertNotIn(f"[Basemodel]", output)
+            self.assertNotIn(f"[City]", output)
+            self.assertTrue(output.startswith('["'))
+            self.assertTrue(output.endswith('"]'))
+
 
 if __name__ == '__main__':
     unittest.main()
