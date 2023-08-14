@@ -26,9 +26,9 @@ class TestConsole(unittest.TestCase):
         Test the 'create' command of the console.
         Checks if the command creates an instance and prints its ID.
         """
-        with patch('sys.stdout', new=StringIO) as mock_stdout:
+        with patch('sys.stdout', new_callable=StringIO) as f:
             self.console.onecmd("create BaseModel")
-            output = mock_stdout.getvalue().strip()
+            output = f.getvalue().strip()
             self.assertTrue(len(output) > 0)
 
     def test_show(self):
@@ -37,9 +37,9 @@ class TestConsole(unittest.TestCase):
         Checks if the command prints the correct
         message when instance ID is missing.
         """
-        with patch('sys.stdout', new=StringIO) as mock_stdout:
+        with patch('sys.stdout', new_callable=StringIO) as f:
             self.console.onecmd("show BaseModel")
-            output = mock_stdout.getvalue().strip()
+            output = f.getvalue().strip()
             self.assertEqual(output, "** instance id missing **")
 
     def test_destroy(self):
@@ -48,9 +48,9 @@ class TestConsole(unittest.TestCase):
         Checks if the command prints the correct
         message when instance ID is missing.
         """
-        with patch('sys.stdout', new=StringIO) as mock_stdout:
+        with patch('sys.stdout', new_callable=StringIO) as f:
             self.console.onecmd("destroy BaseModel")
-            output = mock_stdout.getvalue().strip()
+            output = f.getvalue().strip()
             self.assertEqual(output, "** instance id missing **")
 
     def test_all(self):
@@ -58,9 +58,9 @@ class TestConsole(unittest.TestCase):
         Test the 'all' command of the console.
         Checks if the command prints a list of all instances.
         """
-        with patch('sys.stdout', new=StringIO) as mock_stdout:
+        with patch('sys.stdout', new_callable=StringIO) as f:
             self.console.onecmd("all")
-            output = mock_stdout.getvalue().strip()
+            output = f.getvalue().strip()
             self.assertTrue(len(output) > 0)
 
     def test_update(self):
@@ -69,9 +69,9 @@ class TestConsole(unittest.TestCase):
         Checks if the command prints the correct
         message when instance ID is missing.
         """
-        with patch('sys.stdout', new=StringIO) as mock_stdout:
+        with patch('sys.stdout', new_callable=StringIO) as f:
             self.console.onecmd("update BaseModel")
-            output = mock_stdout.getvalue().strip()
+            output = f.getvalue().strip()
             self.assertEqual(output, "** instance id missing **")
 
     def test_count(self):
@@ -79,9 +79,9 @@ class TestConsole(unittest.TestCase):
         Test the 'count' command of the console.
         Checks if the command prints a valid count of instances.
         """
-        with patch('sys.stdout', new=StringIO) as mock_stdout:
+        with patch('sys.stdout', new_callable=StringIO) as f:
             self.console.onecmd("count BaseModel")
-            output = mock_stdout.getvalue().strip()
+            output = f.getvalue().strip()
             self.assertTrue(output.isdigit())
 
 
