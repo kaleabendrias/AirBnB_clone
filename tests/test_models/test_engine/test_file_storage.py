@@ -37,6 +37,18 @@ class Test_for_FileStorage(unittest.TestCase):
         del dictOfObj[key]
         storage.save()
 
+    def test_for__objects(self):
+        """
+        tests the existence of the attr __objects
+        """
+        self.assertTrue(hasattr(FileStorage, '_FileStorage__objects'))
+
+    def test_for__file_path(self):
+        """
+        tests the existence of the attr __file_path
+        """
+        self.assertTrue(hasattr(FileStorage, '_FileStorage__file_path'))
+
     def test_for_all(self):
         """
         tests the returned dictionary __objects
