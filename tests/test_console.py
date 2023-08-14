@@ -38,7 +38,7 @@ class TestConsole(unittest.TestCase):
 
     def setUp(self):
         self.console = HBNBCommand()
-        
+
     def test_quit(self):
         """ Test quit method"""
         with patch("sys.stdout", new=StringIO()) as f:
@@ -50,42 +50,42 @@ class TestConsole(unittest.TestCase):
         with patch('sys.stdout', new=StringIO()) as mock_stdout:
             self.console.onecmd("BaseModel.count")
             self.assertIn("", mock_stdout.getvalue())
-            
+
     def test_EOF(self):
         """ Test EOF method"""
         with patch("sys.stdout", new=StringIO()) as f:
             HBNBCommand().onecmd("EOF")
             output = f.getvalue().strip()
             self.assertEqual(output, "")
-    
+
     def test_empty_line(self):
         """ Test empty_line method"""
         with patch("sys.stdout", new=StringIO()) as f:
             HBNBCommand().onecmd("")
             output = f.getvalue().strip()
             self.assertEqual(output, "")
-    
+
     def test_help_create(self):
         """ Test help_create method"""
         with patch("sys.stdout", new=StringIO()) as f:
             HBNBCommand().onecmd("help create")
             output = f.getvalue().strip()
             self.assertIsNotNone(output)
-    
+
     def test_help_show(self):
         """ Test help_show method"""
         with patch("sys.stdout", new=StringIO()) as f:
             HBNBCommand().onecmd("help show")
             output = f.getvalue().strip()
             self.assertIsNotNone(output)
-    
+
     def test_help_destroy(self):
         """ Test help_destroy method"""
         with patch("sys.stdout", new=StringIO()) as f:
             HBNBCommand().onecmd("help destroy")
             output = f.getvalue().strip()
             self.assertIsNotNone(output)
-    
+
     def test_help_all(self):
         """ Test help_all method"""
         with patch("sys.stdout", new=StringIO()) as f:
@@ -99,7 +99,7 @@ class TestConsole(unittest.TestCase):
             HBNBCommand().onecmd("help update")
             output = f.getvalue().strip()
             self.assertIsNotNone(output)
-            
+
     def test_create_with_valid_class_name_BaseModel(self):
         """ Test create with valid class name"""
         with patch("sys.stdout", new=StringIO()) as f:
@@ -169,14 +169,14 @@ class TestConsole(unittest.TestCase):
                 uuid.UUID(output)
             except ValueError:
                 self.fail("Output is not a valid UUID")
-    
+
     def test_create_without_class_name(self):
         """ Test create without class name"""
         with patch("sys.stdout", new=StringIO()) as f:
             HBNBCommand().onecmd("create")
             output = f.getvalue().strip()
             self.assertEqual(output, "** class name missing **")
-    
+
     def test_create_with_invalid_class_name(self):
         """ Test create with invalid class name"""
         with patch("sys.stdout", new=StringIO()) as f:
@@ -200,7 +200,6 @@ class TestConsole(unittest.TestCase):
             self.assertFalse(output.startswith('["'))
             self.assertFalse(output.endswith('"]'))
 
-    
 
 if __name__ == '__main__':
     unittest.main()
