@@ -18,6 +18,8 @@ class Test_for_FileStorage(unittest.TestCase):
     this is a class that deals with in
     testing the methods and attr of FileStorage
     """
+    storage = storage
+
     def setUp(self):
         """
         setUp method;
@@ -41,13 +43,13 @@ class Test_for_FileStorage(unittest.TestCase):
         """
         tests the existence of the attr __objects
         """
-        self.assertTrue(hasattr(FileStorage, '_FileStorage__objects'))
+        self.assertIsInstance(self.storage._FileStorage__objects, dict)
 
     def test__file_path(self):
         """
         tests the existence of the attr __file_path
         """
-        self.assertTrue(hasattr(FileStorage, '_FileStorage__file_path'))
+        self.assertEqual(self.storage._FileStorage__file_path, "file.json")
 
     def test_for_all(self):
         """
