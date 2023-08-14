@@ -20,8 +20,6 @@ class TestConsole(unittest.TestCase):
         Set up the test environment by creating an instance of HBNBCommand.
         """
         self.console = HBNBCommand()
-
-    def test_create(self):
         """
         Test the 'create' command of the console.
         Checks if the command creates an instance and prints its ID.
@@ -101,6 +99,25 @@ class TestConsole(unittest.TestCase):
         with patch("sys.stdout", new=StringIO()) as f:
             HBNBCommand().onecmd("EOF")
             self.assertEqual(f.getvalue(), "")
+
+    def test_help(self):
+        """
+        test the 'help' command of the console
+        Checks if the command gives info of the console commands
+        """
+        with patch("sys.stdout", new=StringIO()) as f:
+            HBNBCommand().onecmd("help")
+            self.assertNotEqual(f.getvalue(), "")
+
+    def test_empty_line(self):
+        """
+        tests that an empty line command of the console
+        executes nothing
+        """
+        with patch("sys.stdout", new=StringIO()) as f:
+            HBNBCommand().onecmd("quit")
+            self.assertEqual(f.getvalue(), "")
+
 
 if __name__ == '__main__':
     unittest.main()
