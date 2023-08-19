@@ -6,8 +6,8 @@
     border-radius: 4px;
     display: flex;
     align-items: center;
-    justify-content: flex-end; /* Aligns content to the right within .filters */
-    padding-right: 30px; /* Adds space to the right */
+    justify-content: flex-end;
+    padding-right: 30px;
 }
 
 button {
@@ -22,7 +22,7 @@ button {
     transition: opacity 0.2s;
     display: flex;
     align-items: center;
-    justify-content: center; /* Centers text horizontally within the button */
+    justify-content: center;
 }
 
 button:hover {
